@@ -1,29 +1,31 @@
+
 name: SuperKart ML CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install -r app/requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install huggingface_hub
 
-    - name: Run tests (optional)
-      run: echo "Add pytest or model checks here"
-
-    - name: Push to Hugging Face (optional)
-      run: |
-        python src/push_to_hub.py
+      - name: Run Hugging Face push script
+        run: python src/push_to_hub.py
