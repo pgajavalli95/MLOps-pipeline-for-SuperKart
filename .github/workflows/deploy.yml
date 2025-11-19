@@ -1,0 +1,29 @@
+name: SuperKart ML CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install -r app/requirements.txt
+
+    - name: Run tests (optional)
+      run: echo "Add pytest or model checks here"
+
+    - name: Push to Hugging Face (optional)
+      run: |
+        python src/push_to_hub.py
